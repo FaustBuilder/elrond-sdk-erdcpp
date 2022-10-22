@@ -14,7 +14,9 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/external)
 include_directories(${LIBSODIUM_INCLUDE_PATH})
 
-find_library(LIBSODIUM_LIBRARY libsodium.so.23.3.0 ${LIBSODIUM_LIB_PATH} REQUIRED)
+find_library(LIBSODIUM_LIBRARY libsodium.a libsodium.so.23.3.0 ${LIBSODIUM_LIB_PATH} REQUIRED)
+
+set(OPENSSL_ROOT_DIR /usr/local/opt/openssl@3 )
 
 find_package(OpenSSL REQUIRED)
 if(OPENSSL_FOUND)
