@@ -4,6 +4,10 @@
 #include "errors.h"
 #include "stdexcept"
 
+#if __APPLE__
+#include <mach-o/dyld.h>
+#endif
+
 namespace util
 {
 template <typename T>
@@ -29,8 +33,16 @@ inline void checkParam<std::string>(std::string const &param, std::string const 
 inline std::string getCanonicalRootPath(std::string const &path)
 {
     // Get absolute path to executable
-    std::string canonicalPath = std::string(canonicalize_file_name("/proc/self/exe"));
-
+    std::string canonicalPath;
+    
+#if __APPLE__
+    char pathTmp[1024];
+    uint32_t size = sizeof(pathTmp);
+    _NSGetExecutablePath(pathTmp, &size);
+    canonicalPath = std::string(pathTmp);
+#else
+   canonicalPath = std::string(canonicalize_file_name("/proc/self/exe"));
+#endif
     // Remove everything in path until elrond-sdk-erdcpp directory and concatenate it with the path
     // Use rfind because github action runs into elrond-sdk-erdcpp/elrond-sdk-erdcpp folder
     auto const pos = canonicalPath.rfind("elrond-sdk-erdcpp");

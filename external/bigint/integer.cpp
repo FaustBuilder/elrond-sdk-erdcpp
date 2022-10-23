@@ -219,7 +219,7 @@ integer::operator int64_t() const {
 integer integer::operator&(const integer & rhs) const {
     integer::REP out;
 
-    const integer::REP_SIZE_T max_bits = std::max(bits(), rhs.bits());
+    const integer::REP_SIZE_T max_bits = (uint32_t)std::max(bits(), rhs.bits());
     const integer             left     = (    _sign == integer::POSITIVE)?*this:twos_complement(max_bits);
     const integer             right    = (rhs._sign == integer::POSITIVE)?rhs:rhs.twos_complement(max_bits);
 
@@ -243,7 +243,7 @@ integer & integer::operator&=(const integer & rhs){
 }
 
 integer integer::operator|(const integer & rhs) const {
-    const integer::REP_SIZE_T max_bits = std::max(bits(), rhs.bits());
+    const integer::REP_SIZE_T max_bits = (uint32_t)std::max(bits(), rhs.bits());
     const integer             left     = (    _sign == integer::POSITIVE)?*this:twos_complement(max_bits);
     const integer             right    = (rhs._sign == integer::POSITIVE)?rhs:rhs.twos_complement(max_bits);
 
@@ -278,7 +278,7 @@ integer & integer::operator|=(const integer & rhs){
 }
 
 integer integer::operator^(const integer & rhs) const {
-    const integer::REP_SIZE_T max_bits = std::max(bits(), rhs.bits());
+    const integer::REP_SIZE_T max_bits = (uint32_t)std::max(bits(), rhs.bits());
     const integer             left     = (    _sign == integer::POSITIVE)?*this:twos_complement(max_bits);
     const integer             right    = (rhs._sign == integer::POSITIVE)?rhs:rhs.twos_complement(max_bits);
 
@@ -378,7 +378,7 @@ integer integer::operator<<(const integer & shift) const {
     }
     else{
         // push back zeros, excluding the one already there
-        out.insert(out.end(), whole - 1, 0);
+        out.insert(out.end(), (uint8_t)(whole - 1), 0);
     }
 
     return integer(out, _sign);
@@ -1053,7 +1053,7 @@ integer & integer::operator*=(const integer & rhs){
 // Non-Recursive version of above algorithm
 std::pair <integer, integer> integer::non_recursive_divmod(const integer & lhs, const integer & rhs) const {
     std::pair <integer, integer> qr (0, 0);
-    for(integer::REP_SIZE_T x = lhs.bits(); x > 0; x--){
+    for(integer::REP_SIZE_T x = (unsigned int)lhs.bits(); x > 0; x--){
         qr.first  <<= 1;
         qr.second <<= 1;
 
@@ -1255,7 +1255,7 @@ std::string integer::str(const integer & base, const std::string::size_type & le
             std::pair <integer, integer> qr;
             do{
                 qr = dm(rhs, base);
-                out = digits[qr.second] + out;
+                out = digits[(unsigned int)qr.second] + out;
                 rhs = qr.first;
             } while (rhs);
         }

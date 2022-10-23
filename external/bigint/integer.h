@@ -39,6 +39,9 @@ THE SOFTWARE.
 #ifndef __INTEGER__
 #define __INTEGER__
 
+typedef unsigned char uint8_t; //permet de corriger un problème de compile avec Clang
+
+
 #ifndef INTEGER_DIGIT_T
 #define INTEGER_DIGIT_T        uint8_t
 #endif
@@ -154,6 +157,7 @@ class integer{
             setFromZ(rhs);
             return *this;
         }
+
 
         // Typecast Operators
         operator bool()     const;
