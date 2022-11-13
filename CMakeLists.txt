@@ -26,5 +26,6 @@ endif()
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(cli)
+add_subdirectory(walletconnect)
 add_subdirectory(external)
 

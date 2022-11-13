@@ -6,6 +6,12 @@
 #include "aes_128_ctr/aes.hpp"
 #include "keccak/sha3.hpp"
 
+#include <openssl/evp.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#undef APPMACROS_ONLY
+// #include <openssl/applink.c>
+
 #define CHAR_PTR(x) (const_cast<char *>((x).data()))
 #define UCHAR_PTR(x) (reinterpret_cast<unsigned char *>(CHAR_PTR(x)))
 #define CONST_UCHAR_PTR(x) reinterpret_cast<unsigned char const *>((x).data())
@@ -134,6 +140,119 @@ bytes aes128ctrDecrypt(bytes const &key, std::string cipherText, std::string con
     AES_CTR_xcrypt_buffer(&ctx, cipher, cipherSize);
 
     return bytes(cipher, cipher + cipherSize);
+}
+
+bytes aes256crypt(bytes const& key, std::string cipherText, std::string const& iv)
+{
+    auto k = CONST_UCHAR_PTR(key);
+    auto initVector = CONST_UCHAR_PTR(iv);
+    auto cipher = UCHAR_PTR(cipherText);
+    auto cipherSize = cipherText.size();
+
+    // ctx holds the state of the encryption algorithm so that it doesn't
+    // reset back to its initial state while encrypting more than 1 block.
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    //EVP_CIPHER_CTX ctx;
+    EVP_CIPHER_CTX_init(ctx);
+
+    std::vector<unsigned char> encrypted;
+    size_t max_output_len = cipherText.length() + 16 - (cipherText.length() % 16);
+    encrypted.resize(max_output_len);
+
+    // Enc is 1 to encrypt, 0 to decrypt, or -1 (see documentation).
+    EVP_CipherInit_ex(ctx, EVP_aes_256_cbc(), NULL, k, initVector, 1);
+
+    // EVP_CipherUpdate can encrypt all your data at once, or you can do
+    // small chunks at a time.
+    int actual_size = 0;
+    EVP_CipherUpdate(ctx,
+        &encrypted[0], &actual_size,
+        reinterpret_cast<unsigned char*>(&cipherText[0]), cipherText.size());
+
+    // EVP_CipherFinal_ex is what applies the padding.  If your data is
+    // a multiple of the block size, you'll get an extra AES block filled
+    // with nothing but padding.
+    int final_size;
+    EVP_CipherFinal_ex(ctx, &encrypted[actual_size], &final_size);
+    actual_size += final_size;
+
+    encrypted.resize(actual_size);
+
+    EVP_CIPHER_CTX_cleanup(ctx);
+    EVP_CIPHER_CTX_free(ctx);
+
+
+    // 7 Pour le padding de 7 : PKCS7Padding
+    return bytes(encrypted.data(), encrypted.data() + actual_size);
+}
+
+void handleOpenSSLErrors(void)
+{
+    ERR_print_errors_fp(stderr);
+    abort();
+}
+
+std::string aes256decrypt(bytes const& key, std::string cipherText, std::string const& iv)
+{
+    auto k = CONST_UCHAR_PTR(key);
+    auto initVector = CONST_UCHAR_PTR(iv);
+    auto cipher = UCHAR_PTR(cipherText);
+    auto cipherSize = cipherText.size();
+
+
+    //AES_ctx ctx{};
+
+    //AES_init_ctx_iv(&ctx, k, initVector);
+    //AES_CBC_decrypt_buffer(&ctx, cipher, cipherSize);
+
+    //return nullptr;
+
+
+
+    EVP_CIPHER_CTX* ctx;
+    unsigned char* plaintexts;
+    int len;
+    int plaintext_len;
+    unsigned char* plaintext = new unsigned char[cipherSize];
+    memset(plaintext, 0, sizeof(plaintext));
+
+    /* Create and initialise the context */
+    if (!(ctx = EVP_CIPHER_CTX_new())) handleOpenSSLErrors();
+
+    /* Initialise the decryption operation. IMPORTANT - ensure you use a key
+     * and IV size appropriate for your cipher
+     * In this example we are using 256 bit AES (i.e. a 256 bit key). The
+     * IV size for *most* modes is the same as the block size. For AES this
+     * is 128 bits */
+    if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, k, initVector))
+        handleOpenSSLErrors();
+
+    EVP_CIPHER_CTX_set_key_length(ctx, EVP_MAX_KEY_LENGTH);
+
+    /* Provide the message to be decrypted, and obtain the plaintext output.
+      * EVP_DecryptUpdate can be called multiple times if necessary
+      */
+    if (1 != EVP_DecryptUpdate(ctx, plaintext, &len, cipher, cipherSize))
+        handleOpenSSLErrors();
+
+    plaintext_len = len;
+
+    /* Finalise the decryption. Further plaintext bytes may be written at
+     * this stage.
+     */
+    if (1 != EVP_DecryptFinal_ex(ctx, plaintext + len, &len)) 
+        handleOpenSSLErrors();
+    plaintext_len += len;
+
+
+    /* Add the null terminator */
+    plaintext[plaintext_len] = 0;
+
+    /* Clean up */
+    EVP_CIPHER_CTX_free(ctx);
+    std::string ret = (char*)plaintext;
+    delete[] plaintext;
+    return ret;
 }
 
 std::string sha3Keccak(std::string const &message)

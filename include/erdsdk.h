@@ -19,5 +19,6 @@
 #include "filehandler/pemreader.h"
 #include "filehandler/keyfilereader.h"
 #include "provider/proxyprovider.h"
+#include "wrappers/jsonwrapper.h"
 
 #endif //ERD_SDK_H
