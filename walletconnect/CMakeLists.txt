@@ -6,15 +6,15 @@ include_directories(inputhandler)
 set(HEADER_FILES entity/ClientMeta.h
                  entity/SocketMessage.h
                  websocket/easywsclient.h
-                 ClientSession.h
+                 session/ClientSession.h
                  qrcode/qrcodegen.h
-                 SessionManager.h)
+                 session/SessionManager.h)
                  
 set(SOURCE_FILES main.cpp
                  websocket/easywsclient.cpp
-                 ClientSession.cpp
+                 session/ClientSession.cpp
                  qrcode/qrcodegen.cpp
-                 SessionManager.cpp)
+                 session/SessionManager.cpp)
                  
 add_executable(walletconnect ${HEADER_FILES}
                       ${SOURCE_FILES})

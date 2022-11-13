@@ -1,18 +1,15 @@
 #include "erdsdk.h"
 #include "websocket/easywsclient.h"
-#include "ClientSession.h"
+#include "session/ClientSession.h"
 #include "entity/SocketMessage.h"
 #include "qrcode/qrcodegen.h"
 #include "wrappers/cryptosignwrapper.h"
 #include "wrappers/jsonrpcppwrapper.h"
-#include "SessionManager.h"
+#include "session/SessionManager.h"
 #include <sstream>
 #include <random>
 #include <chrono>
 #include <iostream>
-
-
-
 #include <fstream>
 
 

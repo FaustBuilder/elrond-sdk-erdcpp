@@ -1,7 +1,7 @@
 #include "SessionManager.h"
 #include "wrappers/cryptosignwrapper.h"
 #include "wrappers/jsonrpcppwrapper.h"
-#include "utils/utils.h"
+#include "../utils/utils.h"
 #include <random>
 #include <chrono>
 #include <fstream>

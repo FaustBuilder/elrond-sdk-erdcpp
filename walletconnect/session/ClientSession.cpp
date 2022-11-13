@@ -55,20 +55,20 @@ namespace WalletConnect
 	ClientSession::ClientSession()
 	{
         calculateBridgeURL();
-        Topic = genererGUID();
-        PeerID = genererGUID();
+        m_Topic = genererGUID();
+        m_PeerID = genererGUID();
         calculateKey();
-        VersionEncode = "1";
-        std::string BridgeUrlEncode(urlencode(BridgeURL));
-        QrCodeUrl = "wc:" + Topic + "@" + VersionEncode + "?bridge=" + BridgeUrlEncode + "&key=" + Key;
+        m_VersionEncode = "1";
+        std::string BridgeUrlEncode(urlencode(m_BridgeURL));
+        m_QrCodeUrl = "wc:" + m_Topic + "@" + m_VersionEncode + "?bridge=" + BridgeUrlEncode + "&key=" + m_Key;
 	}
 
     void ClientSession::SetDappMeta(std::string description, std::string url, std::vector<std::string> icons, std::string name)
 	{
-        DappMeta.description = description;
-        DappMeta.url = url;
-        DappMeta.icons = icons;
-        DappMeta.name = name;
+        m_DappMeta.description = description;
+        m_DappMeta.url = url;
+        m_DappMeta.icons = icons;
+        m_DappMeta.name = name;
 	}
 
 	void ClientSession::calculateBridgeURL()
@@ -80,9 +80,9 @@ namespace WalletConnect
         std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
         std::uniform_int_distribution<int> distrib{ 0, 39 };
 
-        BridgeURL = "https://";
-        BridgeURL.push_back(AlphaNumeric[distrib(re)]);
-        BridgeURL.append(".bridge.walletconnect.org");
+        m_BridgeURL = "https://";
+        m_BridgeURL.push_back(AlphaNumeric[distrib(re)]);
+        m_BridgeURL.append(".bridge.walletconnect.org");
 	}
 
     std::string ClientSession::string_to_hex(const std::string& input)
@@ -106,16 +106,16 @@ namespace WalletConnect
         std::uniform_int_distribution<int> distrib{ 0, 255 };
 
         // Prep keys, not part of performance test
-        KeyArray.resize(32);
+        m_KeyArray.resize(32);
         for (short i = 0; i < 32; i++)
         {
             short randomNumber = distrib(re);
-            KeyArray[i] = (randomNumber);
+            m_KeyArray[i] = (randomNumber);
         }
-        std::string keyString(KeyArray.begin(), KeyArray.end());
-        Key = string_to_hex(keyString);
+        std::string keyString(m_KeyArray.begin(), m_KeyArray.end());
+        m_Key = string_to_hex(keyString);
 
-        std::transform(Key.begin(), Key.end(), Key.begin(),
+        std::transform(m_Key.begin(), m_Key.end(), m_Key.begin(),
             [](unsigned char c) { return std::tolower(c); });
 
     }

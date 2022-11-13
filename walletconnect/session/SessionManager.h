@@ -1,13 +1,13 @@
 #pragma once
-#include "websocket/easywsclient.h"
+#include "../websocket/easywsclient.h"
 #include <vector>
 #include <string>
 #include <memory>
 #include <chrono>
 
 #include "ClientSession.h"
-#include "entity/ClientMeta.h"
-#include "entity/SocketMessage.h"
+#include "../entity/ClientMeta.h"
+#include "../entity/SocketMessage.h"
 
 
 namespace WalletConnect
