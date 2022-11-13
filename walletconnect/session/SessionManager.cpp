@@ -15,7 +15,7 @@ namespace WalletConnect
 	void SessionManager::InitialiseClientSession()
     {
         m_ClientSession = WalletConnect::ClientSession();
-        CreationFichierQrCode();
+        creationFichierQrCode();
         InitServerConnexion();
         sendSubscriptionMessage();
         nlohmann::json jMetaClient = GetMetaClient();
@@ -292,16 +292,9 @@ namespace WalletConnect
         //{"payload":"{\"data\":\"712abaea0a7017152bd4723706d10ace40306739ca7f0ce84613d44061d260f7ac2e6e06dce93eddbaee4191dd05b9e5a034b63a1988455b38abe5274a45ed29c944c426bacad0993fe5680b0979f408c7a6549e8ce0ad3fe9b680259c4adc64a045e17f8f0cdab3e5c5174c29507334da4b9785e1df98e7dc232788a04918c11be7f48f84a32b3b3836c7fb4c3b65244fe9781a1d1db1bce67dc12c6889c93db04db91d08f827d25dbafe48cb34738b90168414a64ce70b4fae49039da142aa382a280820d0e58b9ab0fd5d474b40c2622a891daf71c071ef4a4e23e30ea50a37ba647fc0f3df77f3cef8aac442ce8db0877e992738b6633348f9916c9680b43a9e30c16f2959f8c15a04ca0cba2b2b566edf4f9ae86aab8bc9f4b6b178b39ec52393ed4bd01770c64e2d4d086c6c4cac118e7224d847c0d91963e4e54b8646e063c0356b47feff7597184b936115c8e07641a230faaca9a75090d10e8705af03c2162799e33c51407d685e50472810\",\"hmac\":\"3b57da1d5f27bcc40fb98dfa09f00a53399ef8ec9ea44b80a01a4698d848774d\",\"iv\":\"c3b640baa72ede6d7a20a39a5b10a288\"}","silent":true,"topic":"FE04B3B9-F58C-4F75-805E-FBC09CED78FB","type":"pub"}
     }
 
-    void SessionManager::CreationFichierQrCode()
+    void SessionManager::creationFichierQrCode()
     {
-        qrcodegen::QrCode qr0 = qrcodegen::QrCode::encodeText(m_ClientSession.GetQrCodeUrl().c_str(), qrcodegen::QrCode::Ecc::LOW);
-        std::string svg = toSvgString(qr0, 4);  // See QrCodeGeneratorDemo
-        
-        // POUR LES TESTS
-        std::ofstream myfile;
-        myfile.open ("test.svg");
-        myfile << svg;
-        myfile.close();
+        OnCreationFichierQrCode(m_ClientSession.GetQrCodeUrl().c_str());
     }
 
 }

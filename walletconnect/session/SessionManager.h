@@ -25,6 +25,7 @@ namespace WalletConnect
 
         inline bool IsServerConnected() { return m_IsConnexionApprouved && m_ServerConnexion; }
         void sendAckMessage(const std::string& topic);
+        void creationFichierQrCode();
 
         public:
         SessionManager(){}
@@ -34,13 +35,13 @@ namespace WalletConnect
         void SendPublicationMessage(const std::string& method, const std::string& peerMeta);
         void SendPublicationMessage(const std::string& method, const nlohmann::json& peerMeta);
         void sendSubscriptionMessage();
-        void CreationFichierQrCode();
         void WaitMessage();
 	void InitialiseClientSession();
 
         virtual void OnMessageReceived(const std::string& message){}
         virtual void OnConnexionApproved(){}
         virtual void OnConnexionClosed(){}
+        virtual void OnCreationFichierQrCode(std::string qrCode){}
 
         inline WalletConnect::ClientMeta GetMetaClient() { return m_MetaClient; }
 
