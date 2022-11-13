@@ -38,7 +38,7 @@ namespace WalletConnect
         void WaitMessage();
 	void InitialiseClientSession();
 
-        virtual void OnMessageReceived(const std::string& message, const easywsclient::WebSocket::pointer& websocket){}
+        virtual void OnMessageReceived(const std::string& message){}
         virtual void OnConnexionApproved(){}
         virtual void OnConnexionClosed(){}
 

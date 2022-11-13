@@ -147,7 +147,7 @@ namespace WalletConnect
                 // printf(" Message reçu >>> %s\n", messageDecrypte.dump().c_str());
                 // printf(" Message reçu >>> %s\n", reponse.to_json().dump().c_str());
 
-                OnMessageReceived(message, wsp);
+                OnMessageReceived(message);
             });
             time2 = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(time2 - m_Start);

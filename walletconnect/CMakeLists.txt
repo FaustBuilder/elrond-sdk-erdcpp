@@ -9,14 +9,16 @@ set(HEADER_FILES entity/ClientMeta.h
                  session/ClientSession.h
                  qrcode/qrcodegen.h
                  session/SessionManager.h)
-                 
-set(SOURCE_FILES main.cpp
-                 websocket/easywsclient.cpp
+                
+#  main.cpp
+set(SOURCE_FILES websocket/easywsclient.cpp
                  session/ClientSession.cpp
                  qrcode/qrcodegen.cpp
                  session/SessionManager.cpp)
                  
-add_executable(walletconnect ${HEADER_FILES}
+
+option(BUILD_SHARED_LIBS ON)
+add_library(walletconnect ${HEADER_FILES}
                       ${SOURCE_FILES})
 
 target_link_libraries(walletconnect PUBLIC inputhandler)
