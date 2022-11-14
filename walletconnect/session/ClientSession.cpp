@@ -61,6 +61,7 @@ namespace WalletConnect
         m_VersionEncode = "1";
         std::string BridgeUrlEncode(urlencode(m_BridgeURL));
         m_QrCodeUrl = "wc:" + m_Topic + "@" + m_VersionEncode + "?bridge=" + BridgeUrlEncode + "&key=" + m_Key;
+        m_MaiarWalletLink = "https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet&link=https://maiar.com/?wallet-connect=" + m_QrCodeUrl;
 	}
 
     void ClientSession::SetDappMeta(std::string description, std::string url, std::vector<std::string> icons, std::string name)

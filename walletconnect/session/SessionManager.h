@@ -42,6 +42,7 @@ namespace WalletConnect
         virtual void OnConnexionApproved(){}
         virtual void OnConnexionClosed(){}
         virtual void OnCreationFichierQrCode(std::string qrCode){}
+        virtual void OnCreationMaiarLink(std::string maiarLink){}
 
         inline WalletConnect::ClientMeta GetMetaClient() { return m_MetaClient; }
 

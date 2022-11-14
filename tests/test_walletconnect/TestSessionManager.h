@@ -15,6 +15,7 @@ namespace WalletConnect
         void OnConnexionApproved() override;
         void OnConnexionClosed() override;
         void OnCreationFichierQrCode(std::string qrCode) override;
+        void OnCreationMaiarLink(std::string maiarLink) override;
 	};
 
 }

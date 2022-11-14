@@ -295,6 +295,7 @@ namespace WalletConnect
     void SessionManager::creationFichierQrCode()
     {
         OnCreationFichierQrCode(m_ClientSession.GetQrCodeUrl().c_str());
+        OnCreationMaiarLink(m_ClientSession.GetMaiarWalletLink());
     }
 
 }

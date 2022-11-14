@@ -31,4 +31,9 @@ void TestSessionManager::OnCreationFichierQrCode(std::string qrCode)
         myfile.close();
 }
 
+void TestSessionManager::OnCreationMaiarLink(std::string maiarLink) 
+{
+}
+
+
 }

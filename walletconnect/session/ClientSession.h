@@ -16,6 +16,7 @@ namespace WalletConnect
 		std::string m_Key;
 		std::string m_VersionEncode;
 		std::string m_QrCodeUrl;
+		std::string m_MaiarWalletLink;
 		std::vector<std::string> m_Accounts;
 		int m_ChainID;
 		ClientMeta m_DappMeta;
@@ -32,6 +33,7 @@ namespace WalletConnect
 		inline std::string GetQrCodeUrl() { return m_QrCodeUrl; }
 		inline std::vector<std::string> GetAccounts() { return m_Accounts; }
 		inline int GetChainID() { return m_ChainID; }
+		inline std::string GetMaiarWalletLink() {return m_MaiarWalletLink; }
 		
 		inline void AddAccount(std::string account) { m_Accounts.push_back(account); }
 		inline void SetChainID(int chainID) { m_ChainID = chainID; }
