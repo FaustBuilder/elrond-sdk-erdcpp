@@ -2,6 +2,7 @@
 #include "wrappers/cryptosignwrapper.h"
 #include "wrappers/jsonrpcppwrapper.h"
 #include "../utils/utils.h"
+#include "utils/hex.h"
 #include <random>
 #include <chrono>
 #include <fstream>
@@ -115,9 +116,30 @@ namespace WalletConnect
                         {
                             OnConnexionApproved();
 
-                            for (std::string address : response.result()["accounts"]) 
+                            for (std::string erdAddress : response.result()["accounts"]) 
                             {
-                                m_ClientSession.AddAccount(address);
+                                const std::string address{erdAddress.substr(0, erdAddress.find('.'))};
+                                m_ClientSession.SetSign(erdAddress.substr(erdAddress.find('.') + 1));
+                                m_ClientSession.AddAccount(erdAddress);
+
+                                printf("Adresse : %s\n", erdAddress.substr(0, erdAddress.find('.')).c_str());
+                                printf("Signature : %s\n", erdAddress.substr(erdAddress.find('.')).c_str()+1);
+                                try
+                                {
+                                    ProxyProvider proxy("https://testnet-gateway.elrond.com");
+                                    Address const address(erdAddress);
+                                    Account const account = proxy.getAccount(address);
+                                   
+                                }
+                                catch (std::invalid_argument const &err)
+                                {
+                                    // ...
+                                }
+                                catch (std::runtime_error const &err)
+                                {
+                                    // ...  
+                                }
+
                             }
                             m_ClientSession.SetChainID(response.result()["chainId"]);
                             m_ClientSession.SetDappMeta(response.result()["peerMeta"]["description"], response.result()["peerMeta"]["url"], response.result()["peerMeta"]["icons"], response.result()["peerMeta"]["name"]);

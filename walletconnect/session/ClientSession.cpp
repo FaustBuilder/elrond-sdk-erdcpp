@@ -59,12 +59,15 @@ namespace WalletConnect
         m_PeerID = genererGUID();
         calculateKey();
         m_VersionEncode = "1";
-        std::string BridgeUrlEncode(urlencode(m_BridgeURL));
+        std::string BridgeUrlEncode(urlencode(m_BridgeURL)); 
         m_QrCodeUrl = "wc:" + m_Topic + "@" + m_VersionEncode + "?bridge=" + BridgeUrlEncode + "&key=" + m_Key;
+        if(!m_AuthCustomToken.empty())
+            m_QrCodeUrl += "&token=" + m_AuthCustomToken;
         m_MaiarWalletLink = "https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet&link=https://maiar.com/?wallet-connect=" + m_QrCodeUrl;
 	}
 
-    void ClientSession::SetDappMeta(std::string description, std::string url, std::vector<std::string> icons, std::string name)
+    void ClientSession::SetDappMeta(const std::string& description, const std::string& url, 
+        const std::vector<std::string>& icons, const std::string& name)
 	{
         m_DappMeta.description = description;
         m_DappMeta.url = url;

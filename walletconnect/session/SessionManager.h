@@ -27,9 +27,10 @@ namespace WalletConnect
         void sendAckMessage(const std::string& topic);
         void creationFichierQrCode();
 
-        public:
+public:
         SessionManager(){}
 
+        inline void SetAuthCustomToken(const std::string& authCustomToken) { m_ClientSession.SetAuthCustomToken(authCustomToken); }
         void InitServerConnexion();
         void InitClientMeta(const std::string& description,const std::string& url,const  std::vector<std::string>& icons, const std::string& name);
         void SendPublicationMessage(const std::string& method, const std::string& peerMeta);
